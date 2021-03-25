@@ -30,8 +30,8 @@ defmodule Rockelivery.UserTest do
       assert %Changeset{changes: %{name: "Another John"}, valid?: true} = response
     end
 
-    test "when there are some error, returns an invalid changeset" do
-      params = build(:user_params, age: 17, password: "123")
+    test "when there is some error, returns an invalid changeset" do
+      params = build(:user_params, %{"age" => 17, "password" => "123"})
 
       response = User.changeset(params)
 
