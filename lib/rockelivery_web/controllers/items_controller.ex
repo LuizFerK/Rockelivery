@@ -14,21 +14,21 @@ defmodule RockeliveryWeb.ItemsController do
     end
   end
 
-  # def delete(conn, %{"id" => id}) do
-  #   with {:ok, %Item{}} <- Rockelivery.delete_item(id) do
-  #     conn
-  #     |> put_status(:no_content)
-  #     |> text("")
-  #   end
-  # end
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %Item{}} <- Rockelivery.delete_item(id) do
+      conn
+      |> put_status(:no_content)
+      |> text("")
+    end
+  end
 
-  # def show(conn, %{"id" => id}) do
-  #   with {:ok, %Item{} = item} <- Rockelivery.get_item_by_id(id) do
-  #     conn
-  #     |> put_status(:ok)
-  #     |> render("item.json", item: item)
-  #   end
-  # end
+  def show(conn, %{"id" => id}) do
+    with {:ok, %Item{} = item} <- Rockelivery.get_item_by_id(id) do
+      conn
+      |> put_status(:ok)
+      |> render("item.json", item: item)
+    end
+  end
 
   # def update(conn, params) do
   #   with {:ok, %Item{} = item} <- Rockelivery.update_item(params) do
