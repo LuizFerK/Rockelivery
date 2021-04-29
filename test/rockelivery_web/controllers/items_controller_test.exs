@@ -113,61 +113,58 @@ defmodule RockeliveryWeb.ItemsControllerTest do
     end
   end
 
-  # describe "update/2" do
-  #   setup do
-  #     id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+  describe "update/2" do
+    setup do
+      id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
-  #     insert(:user, id: id)
+      insert(:item, id: id)
 
-  #     {:ok, id: id}
-  #   end
+      {:ok, id: id}
+    end
 
-  #   test "when there is an user with the given id, update the user", %{conn: conn, id: id} do
-  #     params = %{"age" => 20, "password" => "654321"}
+    test "when there is an item with the given id, update the item", %{conn: conn, id: id} do
+      params = %{"description" => "Chicken Pizza", "price" => "42.90"}
 
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, id, params))
-  #       |> json_response(:ok)
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, id, params))
+        |> json_response(:ok)
 
-  #     assert %{
-  #              "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f931",
-  #              "address" => "Random street, 10",
-  #              "age" => 20,
-  #              "cep" => "12345000",
-  #              "cpf" => "12345678900",
-  #              "email" => "johndoe@example.com",
-  #              "name" => "John Doe"
-  #            } = response
-  #   end
+      assert %{
+               "category" => "food",
+               "description" => "Chicken Pizza",
+               "photo" => "/priv/photo/pepperoni_pizza.jpg",
+               "price" => "42.90"
+             } = response
+    end
 
-  #   test "when there are invalid params, returns an error", %{conn: conn, id: id} do
-  #     params = %{"password" => "123"}
+    test "when there are invalid params, returns an error", %{conn: conn, id: id} do
+      params = %{"price" => "-50.50"}
 
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, id, params))
-  #       |> json_response(:bad_request)
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, id, params))
+        |> json_response(:bad_request)
 
-  #     assert %{"error" => %{"password" => ["should be at least 6 character(s)"]}} = response
-  #   end
+      assert %{"error" => %{"price" => ["must be greater than 0"]}} = response
+    end
 
-  #   test "when there is no user with the given id, returns an error", %{conn: conn} do
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, "2baadea4-1d22-4d8c-9455-2ea5d692f932"))
-  #       |> json_response(:not_found)
+    test "when there is no item with the given id, returns an error", %{conn: conn} do
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, "2baadea4-1d22-4d8c-9455-2ea5d692f932"))
+        |> json_response(:not_found)
 
-  #     assert response == %{"error" => "User not found"}
-  #   end
+      assert response == %{"error" => "Item not found"}
+    end
 
-  #   test "when the id format is invalid, returns an error", %{conn: conn} do
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, "invalid_id"))
-  #       |> json_response(:bad_request)
+    test "when the id format is invalid, returns an error", %{conn: conn} do
+      response =
+        conn
+        |> put(Routes.items_path(conn, :update, "invalid_id"))
+        |> json_response(:bad_request)
 
-  #     assert response == %{"message" => "Invalid id format"}
-  #   end
-  # end
+      assert response == %{"message" => "Invalid id format"}
+    end
+  end
 end
