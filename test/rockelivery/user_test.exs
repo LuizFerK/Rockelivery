@@ -19,7 +19,8 @@ defmodule Rockelivery.UserTest do
       params = build(:user_params)
 
       update_params = %{
-        name: "Another John"
+        name: "Another John",
+        password: "123123"
       }
 
       response =
@@ -27,13 +28,32 @@ defmodule Rockelivery.UserTest do
         |> User.changeset()
         |> User.changeset(update_params)
 
-      assert %Changeset{changes: %{name: "Another John"}, valid?: true} = response
+      assert %Changeset{changes: %{name: "Another John", password: "123123"}, valid?: true} =
+               response
     end
 
     test "when there is some error, returns an invalid changeset" do
       params = build(:user_params, %{"age" => 17, "password" => "123"})
 
       response = User.changeset(params)
+
+      expected_response = %{
+        age: ["must be greater than or equal to 18"],
+        password: ["should be at least 6 character(s)"]
+      }
+
+      assert errors_on(response) == expected_response
+    end
+
+    test "when updating a changeset, if there is some error, returns an invalid changeset" do
+      params = build(:user_params)
+
+      update_params = build(:user_params, %{"age" => 17, "password" => "123"})
+
+      response =
+        params
+        |> User.changeset()
+        |> User.changeset(update_params)
 
       expected_response = %{
         age: ["must be greater than or equal to 18"],
