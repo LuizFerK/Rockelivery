@@ -28,7 +28,9 @@ defmodule Rockelivery.Application do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
+    # coveralls-ignore-start
     RockeliveryWeb.Endpoint.config_change(changed, removed)
+    # coveralls-ignore-stop
     :ok
   end
 end

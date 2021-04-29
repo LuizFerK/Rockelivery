@@ -4,7 +4,9 @@ defmodule RockeliveryWeb.Plugs.UUIDChecker do
   alias Ecto.UUID
   alias Plug.Conn
 
+  # coveralls-ignore-start
   def init(options), do: options
+  # coveralls-ignore-stop
 
   def call(%Conn{params: %{"id" => id}} = conn, _opts) do
     case UUID.cast(id) do
