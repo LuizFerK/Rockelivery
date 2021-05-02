@@ -8,6 +8,13 @@ defmodule RockeliveryWeb.Plugs.UUIDChecker do
   def init(options), do: options
   # coveralls-ignore-stop
 
+  def call(%Conn{params: %{"user_id" => id}} = conn, _opts) do
+    case UUID.cast(id) do
+      :error -> render_error(conn)
+      {:ok, _uuid} -> conn
+    end
+  end
+
   def call(%Conn{params: %{"id" => id}} = conn, _opts) do
     case UUID.cast(id) do
       :error -> render_error(conn)
