@@ -1,11 +1,16 @@
 defmodule RockeliveryWeb.UsersControllerTest do
   use RockeliveryWeb.ConnCase, async: true
 
+  import Mox
   import Rockelivery.Factory
+
+  alias Rockelivery.ViaCep.ClientMock
 
   describe "create/2" do
     test "when all params are valid, creates the user", %{conn: conn} do
       params = build(:user_params)
+
+      expect(ClientMock, :get_cep_info, fn _cep -> {:ok, build(:cep_info)} end)
 
       response =
         conn
@@ -15,7 +20,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
       assert %{
                "address" => "Random street, 10",
                "age" => 18,
-               "cep" => "12345000",
+               "cep" => "01001000",
                "cpf" => "12345678900",
                "email" => "johndoe@example.com",
                "name" => "John Doe"
@@ -40,6 +45,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
 
       params = build(:user_params)
 
+      expect(ClientMock, :get_cep_info, fn _cep -> {:ok, build(:cep_info)} end)
+
       response =
         conn
         |> post(Routes.users_path(conn, :create, params))
@@ -54,6 +61,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
       insert(:user, email: "other@email.com")
 
       params = build(:user_params)
+
+      expect(ClientMock, :get_cep_info, fn _cep -> {:ok, build(:cep_info)} end)
 
       response =
         conn
@@ -121,7 +130,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
       assert %{
                "address" => "Random street, 10",
                "age" => 18,
-               "cep" => "12345000",
+               "cep" => "01001000",
                "cpf" => "12345678900",
                "email" => "johndoe@example.com",
                "name" => "John Doe"
@@ -168,7 +177,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
                "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f931",
                "address" => "Random street, 10",
                "age" => 20,
-               "cep" => "12345000",
+               "cep" => "01001000",
                "cpf" => "12345678900",
                "email" => "johndoe@example.com",
                "name" => "John Doe"

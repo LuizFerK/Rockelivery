@@ -7,7 +7,7 @@ defmodule Rockelivery.Factory do
     %{
       "age" => 18,
       "address" => "Random street, 10",
-      "cep" => "12345000",
+      "cep" => "01001000",
       "cpf" => "12345678900",
       "email" => "johndoe@example.com",
       "password" => "123456",
@@ -19,7 +19,7 @@ defmodule Rockelivery.Factory do
     %User{
       age: 18,
       address: "Random street, 10",
-      cep: "12345000",
+      cep: "01001000",
       cpf: "12345678900",
       email: "johndoe@example.com",
       password: "123456",
@@ -44,6 +44,21 @@ defmodule Rockelivery.Factory do
       price: "59.90",
       photo: "/priv/photo/pepperoni_pizza.jpg",
       id: "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+    }
+  end
+
+  def cep_info_factory do
+    %{
+      "bairro" => "Sé",
+      "cep" => "01001-000",
+      "complemento" => "lado ímpar",
+      "ddd" => "11",
+      "gia" => "1004",
+      "ibge" => "3550308",
+      "localidade" => "São Paulo",
+      "logradouro" => "Praça da Sé",
+      "siafi" => "7107",
+      "uf" => "SP"
     }
   end
 end

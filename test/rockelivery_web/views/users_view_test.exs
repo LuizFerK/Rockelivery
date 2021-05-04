@@ -15,7 +15,7 @@ defmodule RockeliveryWeb.UsersViewTest do
     assert %User{
              address: "Random street, 10",
              age: 18,
-             cep: "12345000",
+             cep: "01001000",
              cpf: "12345678900",
              email: "johndoe@example.com",
              id: "2baadea4-1d22-4d8c-9455-2ea5d692f931",
