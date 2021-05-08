@@ -4,4 +4,6 @@ defmodule RockeliveryWeb.OrdersView do
   alias Rockelivery.Order
 
   def render("order.json", %{order: %Order{} = order}), do: order
+
+  def render("orders.json", %{orders: [%Order{} | _] = orders}), do: orders
 end

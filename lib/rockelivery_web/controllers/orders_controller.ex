@@ -22,6 +22,14 @@ defmodule RockeliveryWeb.OrdersController do
   #   end
   # end
 
+  def index(conn, _params) do
+    with {:ok, [%Order{} | _] = orders} <- Rockelivery.get_all_orders() do
+      conn
+      |> put_status(:ok)
+      |> render("orders.json", orders: orders)
+    end
+  end
+
   # def show(conn, %{"id" => id}) do
   #   with {:ok, %Order{} = order} <- Rockelivery.get_order_by_id(id) do
   #     conn
