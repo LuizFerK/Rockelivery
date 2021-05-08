@@ -12,6 +12,8 @@ defmodule Rockelivery do
   alias Rockelivery.Users.Update, as: UserUpdate
 
   alias Rockelivery.Orders.Create, as: OrderCreate
+  alias Rockelivery.Orders.Delete, as: OrderDelete
+  alias Rockelivery.Orders.Get, as: OrderGet
   alias Rockelivery.Orders.GetAll, as: GetAllOrders
 
   defdelegate create_user(params), to: UserCreate, as: :call
@@ -27,5 +29,7 @@ defmodule Rockelivery do
   defdelegate get_all_items(), to: GetAllItems, as: :call
 
   defdelegate create_order(params), to: OrderCreate, as: :call
+  defdelegate delete_order(id), to: OrderDelete, as: :call
+  defdelegate get_order_by_id(id), to: OrderGet, as: :by_id
   defdelegate get_all_orders(), to: GetAllOrders, as: :call
 end
