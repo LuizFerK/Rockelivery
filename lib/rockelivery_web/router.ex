@@ -15,6 +15,7 @@ defmodule RockeliveryWeb.Router do
   scope "/api", RockeliveryWeb do
     pipe_through [:api, :auth]
 
+    get "/users/list", UsersController, :index
     resources "/users", UsersController, except: [:new, :edit, :create]
     resources "/items", ItemsController, except: [:new, :edit]
     resources "/orders", OrdersController, except: [:new, :edit]
