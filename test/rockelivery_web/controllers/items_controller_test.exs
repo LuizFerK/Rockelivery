@@ -3,7 +3,18 @@ defmodule RockeliveryWeb.ItemsControllerTest do
 
   import Rockelivery.Factory
 
+  alias RockeliveryWeb.Auth.Guardian
+
   describe "create/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      {:ok, conn: conn}
+    end
+
     test "when all params are valid, creates the item", %{conn: conn} do
       params = build(:item_params)
 
@@ -35,12 +46,17 @@ defmodule RockeliveryWeb.ItemsControllerTest do
   end
 
   describe "delete/2" do
-    setup do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
       insert(:item, id: id)
 
-      {:ok, id: id}
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an item with the given id, deletes the item", %{conn: conn, id: id} do
@@ -72,12 +88,17 @@ defmodule RockeliveryWeb.ItemsControllerTest do
   end
 
   describe "show/2" do
-    setup do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
       insert(:item, id: id)
 
-      {:ok, id: id}
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an item with the given id, returns the item", %{conn: conn, id: id} do
@@ -114,12 +135,17 @@ defmodule RockeliveryWeb.ItemsControllerTest do
   end
 
   describe "update/2" do
-    setup do
+    setup %{conn: conn} do
+      user = insert(:user)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
       insert(:item, id: id)
 
-      {:ok, id: id}
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an item with the given id, update the item", %{conn: conn, id: id} do

@@ -5,6 +5,7 @@ defmodule RockeliveryWeb.UsersControllerTest do
   import Rockelivery.Factory
 
   alias Rockelivery.ViaCep.ClientMock
+  alias RockeliveryWeb.Auth.Guardian
 
   describe "create/2" do
     test "when all params are valid, creates the user", %{conn: conn} do
@@ -18,12 +19,14 @@ defmodule RockeliveryWeb.UsersControllerTest do
         |> json_response(:created)
 
       assert %{
-               "address" => "Random street, 10",
-               "age" => 18,
-               "cep" => "01001000",
-               "cpf" => "12345678900",
-               "email" => "johndoe@example.com",
-               "name" => "John Doe"
+               "user" => %{
+                 "address" => "Random street, 10",
+                 "age" => 18,
+                 "cep" => "01001000",
+                 "cpf" => "12345678900",
+                 "email" => "johndoe@example.com",
+                 "name" => "John Doe"
+               }
              } = response
     end
 
@@ -76,12 +79,15 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "delete/2" do
-    setup do
+    setup %{conn: conn} do
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
-      insert(:user, id: id)
+      user = insert(:user, id: id)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
-      {:ok, id: id}
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an user with the given id, deletes the user", %{conn: conn, id: id} do
@@ -113,12 +119,15 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "show/2" do
-    setup do
+    setup %{conn: conn} do
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
-      insert(:user, id: id)
+      user = insert(:user, id: id)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
-      {:ok, id: id}
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an user with the given id, returns the user", %{conn: conn, id: id} do
@@ -157,12 +166,15 @@ defmodule RockeliveryWeb.UsersControllerTest do
   end
 
   describe "update/2" do
-    setup do
+    setup %{conn: conn} do
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
-      insert(:user, id: id)
+      user = insert(:user, id: id)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
-      {:ok, id: id}
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      {:ok, conn: conn, id: id}
     end
 
     test "when there is an user with the given id, update the user", %{conn: conn, id: id} do
