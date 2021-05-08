@@ -17,6 +17,7 @@ defmodule RockeliveryWeb.Router do
 
     get "/users/list", UsersController, :index
     resources "/users", UsersController, except: [:new, :edit, :create]
+    get "/items/list", ItemsController, :index
     resources "/items", ItemsController, except: [:new, :edit]
     resources "/orders", OrdersController, except: [:new, :edit]
   end

@@ -22,6 +22,14 @@ defmodule RockeliveryWeb.ItemsController do
     end
   end
 
+  def index(conn, _params) do
+    with {:ok, [%Item{} | _] = items} <- Rockelivery.get_all_items() do
+      conn
+      |> put_status(:ok)
+      |> render("items.json", items: items)
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     with {:ok, %Item{} = item} <- Rockelivery.get_item_by_id(id) do
       conn
