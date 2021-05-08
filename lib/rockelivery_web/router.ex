@@ -11,9 +11,10 @@ defmodule RockeliveryWeb.Router do
   scope "/api", RockeliveryWeb do
     pipe_through :api
 
-    resources "/users/", UsersController, except: [:new, :edit]
-    resources "/items/", ItemsController, except: [:new, :edit]
-    resources "/orders/", OrdersController, except: [:new, :edit]
+    post "/users/signin", UsersController, :sign_in
+    resources "/users", UsersController, except: [:new, :edit]
+    resources "/items", ItemsController, except: [:new, :edit]
+    resources "/orders", OrdersController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
