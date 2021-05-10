@@ -4,7 +4,7 @@ defmodule Rockelivery.Orders.Get do
   def by_id(id) do
     case Repo.get(Order, id) do
       nil -> {:error, Error.build_order_not_found_error()}
-      order -> {:ok, Repo.preload(order, :items)}
+      order -> {:ok, Repo.preload(order, [:items, :user])}
     end
   end
 end

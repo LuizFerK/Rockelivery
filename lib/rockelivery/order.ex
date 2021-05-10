@@ -11,23 +11,26 @@ defmodule Rockelivery.Order do
   @required_params [:address, :comments, :payment_method, :user_id]
   @payment_methods [:money, :credit_card, :debit_card]
 
-  @derive {Jason.Encoder, only: @required_params ++ [:id, :items]}
+  @derive {Jason.Encoder, only: @required_params ++ [:id, :user, :items]}
 
   schema "orders" do
     field :address, :string
     field :comments, :string
     field :payment_method, Enum, values: @payment_methods
 
-    many_to_many :items, Item, join_through: "orders_items"
+    many_to_many :items, Item, join_through: "orders_items", on_replace: :delete
     belongs_to :user, User
 
     timestamps()
   end
 
-  def changeset(struct \\ %__MODULE__{}, params, items) do
+  def changeset(struct \\ %__MODULE__{}, params) do
     struct
     |> cast(params, @required_params)
     |> validate_required(@required_params)
-    |> put_assoc(:items, items)
+    |> put_items(params["items"])
   end
+
+  defp put_items(changeset, items) when is_nil(items), do: changeset
+  defp put_items(changeset, items), do: put_assoc(changeset, :items, items)
 end

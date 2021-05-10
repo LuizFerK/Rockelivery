@@ -19,11 +19,12 @@ defmodule Rockelivery.Orders.Create do
 
   defp handle_items({:ok, items}, params) do
     params
-    |> Order.changeset(items)
+    |> Map.put("items", items)
+    |> Order.changeset()
     |> Repo.insert()
     |> handle_insert()
   end
 
-  defp handle_insert({:ok, %Order{}} = result), do: result
+  defp handle_insert({:ok, %Order{} = order}), do: {:ok, Repo.preload(order, :user)}
   defp handle_insert({:error, result}), do: {:error, Error.build(:bad_request, result)}
 end

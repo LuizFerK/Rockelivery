@@ -5,7 +5,7 @@ defmodule Rockelivery.Orders.GetAll do
     orders =
       Order
       |> Repo.all()
-      |> Repo.preload(:items)
+      |> Repo.preload([:items, :user])
 
     {:ok, orders}
   end

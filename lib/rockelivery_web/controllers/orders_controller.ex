@@ -38,11 +38,11 @@ defmodule RockeliveryWeb.OrdersController do
     end
   end
 
-  # def update(conn, params) do
-  #   with {:ok, %Order{} = order} <- Rockelivery.update_order(params) do
-  #     conn
-  #     |> put_status(:ok)
-  #     |> render("order.json", order: order)
-  #   end
-  # end
+  def update(conn, params) do
+    with {:ok, %Order{} = order} <- Rockelivery.update_order(params) do
+      conn
+      |> put_status(:ok)
+      |> render("order.json", order: order)
+    end
+  end
 end
