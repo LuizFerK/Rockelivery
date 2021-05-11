@@ -1,7 +1,7 @@
 defmodule Rockelivery.Factory do
   use ExMachina.Ecto, repo: Rockelivery.Repo
 
-  alias Rockelivery.{Item, User}
+  alias Rockelivery.{Item, Order, User}
 
   def user_params_factory do
     %{
@@ -30,6 +30,21 @@ defmodule Rockelivery.Factory do
     }
   end
 
+  def cep_info_factory do
+    %{
+      "bairro" => "Sé",
+      "cep" => "01001-000",
+      "complemento" => "lado ímpar",
+      "ddd" => "11",
+      "gia" => "1004",
+      "ibge" => "3550308",
+      "localidade" => "São Paulo",
+      "logradouro" => "Praça da Sé",
+      "siafi" => "7107",
+      "uf" => "SP"
+    }
+  end
+
   def item_params_factory do
     %{
       "category" => "food",
@@ -49,18 +64,23 @@ defmodule Rockelivery.Factory do
     }
   end
 
-  def cep_info_factory do
+  def order_params_factory do
     %{
-      "bairro" => "Sé",
-      "cep" => "01001-000",
-      "complemento" => "lado ímpar",
-      "ddd" => "11",
-      "gia" => "1004",
-      "ibge" => "3550308",
-      "localidade" => "São Paulo",
-      "logradouro" => "Praça da Sé",
-      "siafi" => "7107",
-      "uf" => "SP"
+      "user_id" => "2baadea4-1d22-4d8c-9455-2ea5d692f931",
+      "address" => "Random street, 10",
+      "comments" => "Extra cheese",
+      "payment_method" => "credit_card",
+      "items" => [%{"id" => "2baadea4-1d22-4d8c-9455-2ea5d692f932", "quantity" => 1}]
+    }
+  end
+
+  def order_factory do
+    %Order{
+      user_id: "2baadea4-1d22-4d8c-9455-2ea5d692f931",
+      address: "Random street, 10",
+      comments: "Extra cheese",
+      payment_method: "credit_card",
+      items: ["2baadea4-1d22-4d8c-9455-2ea5d692f932"]
     }
   end
 end
