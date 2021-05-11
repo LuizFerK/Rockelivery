@@ -118,6 +118,44 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
   end
 
+  describe "index/2" do
+    setup do
+      user1_id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+      user2_id = "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+
+      user = insert(:user, id: user1_id)
+      insert(:user, id: user2_id, cpf: "12345678901", email: "test@example.com")
+
+      {:ok, user: user, user1_id: user1_id, user2_id: user2_id}
+    end
+
+    test "should return all users", %{
+      conn: conn,
+      user: user,
+      user1_id: user1_id,
+      user2_id: user2_id
+    } do
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> get(Routes.users_path(conn, :index))
+        |> json_response(:ok)
+
+      assert [%{"id" => ^user1_id}, %{"id" => ^user2_id}] = response
+    end
+
+    test "when user is not authenticated, returns an error", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.users_path(conn, :index))
+        |> json_response(:unauthorized)
+
+      assert %{"message" => "unauthenticated"} = response
+    end
+  end
+
   describe "show/2" do
     setup %{conn: conn} do
       id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
@@ -162,6 +200,49 @@ defmodule RockeliveryWeb.UsersControllerTest do
         |> json_response(:bad_request)
 
       assert response == %{"message" => "Invalid id format"}
+    end
+  end
+
+  describe "sign_in/2" do
+    setup do
+      id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+
+      insert(:user, id: id)
+
+      {:ok, id: id}
+    end
+
+    test "when the credentials are valid, authenticate the user", %{conn: conn, id: id} do
+      params = %{"id" => id, "password" => "123456"}
+
+      response =
+        conn
+        |> post(Routes.users_path(conn, :sign_in, params))
+        |> json_response(:ok)
+
+      assert %{"token" => _} = response
+    end
+
+    test "when the credentials are invalid, returns an error", %{conn: conn, id: id} do
+      params = %{"id" => id, "password" => "wrong_password"}
+
+      response =
+        conn
+        |> post(Routes.users_path(conn, :sign_in, params))
+        |> json_response(:unauthorized)
+
+      assert %{"error" => "Please verify your credentials"} = response
+    end
+
+    test "when the user does not exists, returns an error", %{conn: conn} do
+      params = %{"id" => "2baadea4-1d22-4d8c-9455-2ea5d692f930", "password" => "wrong_password"}
+
+      response =
+        conn
+        |> post(Routes.users_path(conn, :sign_in, params))
+        |> json_response(:not_found)
+
+      assert %{"error" => "User not found"} = response
     end
   end
 

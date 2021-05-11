@@ -22,7 +22,6 @@ defmodule RockeliveryWeb.UsersViewTest do
              inserted_at: nil,
              name: "John Doe",
              password: "123456",
-             password_hash: nil,
              updated_at: nil
            } = response
   end

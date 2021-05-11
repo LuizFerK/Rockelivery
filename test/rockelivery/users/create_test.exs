@@ -31,5 +31,17 @@ defmodule Rockelivery.Users.CreateTest do
 
       assert errors_on(changeset) == expected_response
     end
+
+    test "when the cep does not exists, returns an error" do
+      params = build(:user_params, %{"cep" => "00000000"})
+
+      expect(ClientMock, :get_cep_info, fn _cep ->
+        {:error, Error.build(:not_found, "CEP not found")}
+      end)
+
+      response = Create.call(params)
+
+      assert {:error, %Rockelivery.Error{result: "CEP not found", status: :not_found}} = response
+    end
   end
 end

@@ -87,6 +87,31 @@ defmodule RockeliveryWeb.ItemsControllerTest do
     end
   end
 
+  describe "index/2" do
+    setup %{conn: conn} do
+      item1_id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+      item2_id = "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+
+      insert(:item, id: item1_id)
+      insert(:item, id: item2_id)
+      user = insert(:user)
+
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      {:ok, conn: conn, item1_id: item1_id, item2_id: item2_id}
+    end
+
+    test "should return all items", %{conn: conn, item1_id: item1_id, item2_id: item2_id} do
+      response =
+        conn
+        |> get(Routes.items_path(conn, :index))
+        |> json_response(:ok)
+
+      assert [%{"id" => ^item1_id}, %{"id" => ^item2_id}] = response
+    end
+  end
+
   describe "show/2" do
     setup %{conn: conn} do
       user = insert(:user)

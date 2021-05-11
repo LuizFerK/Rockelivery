@@ -23,6 +23,8 @@ defmodule Rockelivery.Factory do
       cpf: "12345678900",
       email: "johndoe@example.com",
       password: "123456",
+      password_hash:
+        "$pbkdf2-sha512$160000$5zoT/vkD/v4cVTyeL9XhyA$lssj/b2OxdxiwzRnlmdMHr1PHVFa2UcNmlScYTvao9D96KVeZPHM2naWuRXCOzFOECx02O9xtgN7VRzsMwmZlA",
       name: "John Doe",
       id: "2baadea4-1d22-4d8c-9455-2ea5d692f931"
     }

@@ -23,8 +23,7 @@ defmodule Rockelivery.Users.GetTest do
                 email: "johndoe@example.com",
                 id: "675d8596-9950-4059-a1cd-ed1a2ec3d18d",
                 name: "John Doe",
-                password: nil,
-                password_hash: nil
+                password: nil
               }} = response
     end
 
