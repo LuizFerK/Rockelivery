@@ -10,7 +10,7 @@ defmodule Rockelivery.Orders.Update do
 
     with %Order{} = order <- Repo.get(Order, id),
          {:ok, items} <- validate_items(items),
-         {:ok, %User{}} <- validate_user(user_id) do
+         {:ok, _} <- validate_user(user_id) do
       params = put_items(params, items)
 
       order
@@ -20,9 +20,12 @@ defmodule Rockelivery.Orders.Update do
       |> handle_insert()
     else
       nil -> {:error, Error.build_order_not_found_error()}
-      error -> error
+      {:error, %Error{}} = error -> error
+      {:error, reason} -> {:error, Error.build(:bad_request, reason)}
     end
   end
+
+  defp validate_user(user_id) when is_nil(user_id), do: {:ok, nil}
 
   defp validate_user(user_id) do
     case Repo.get(User, user_id) do
