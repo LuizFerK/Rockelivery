@@ -27,4 +27,4 @@ rockelivery-*.tar
 # this depending on your deployment strategy.
 /priv/static/
 
-report.csv
+*.csv

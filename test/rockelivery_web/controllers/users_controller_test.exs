@@ -23,8 +23,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
                  "address" => "Random street, 10",
                  "age" => 18,
                  "cep" => "01001000",
-                 "cpf" => "12345678900",
-                 "email" => "johndoe@example.com",
+                 "cpf" => _,
+                 "email" => _,
                  "name" => "John Doe"
                }
              } = response
@@ -44,9 +44,11 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test "when the email is already taken, returns an error", %{conn: conn} do
-      insert(:user, cpf: "12345678901")
+      email = "johndoe@example.com"
 
-      params = build(:user_params)
+      insert(:user, email: email)
+
+      params = build(:user_params, %{"email" => email})
 
       expect(ClientMock, :get_cep_info, fn _cep -> {:ok, build(:cep_info)} end)
 
@@ -61,9 +63,11 @@ defmodule RockeliveryWeb.UsersControllerTest do
     end
 
     test "when the cpf is already taken, returns an error", %{conn: conn} do
-      insert(:user, email: "other@email.com")
+      cpf = "12345678900"
 
-      params = build(:user_params)
+      insert(:user, email: "other@email.com", cpf: cpf)
+
+      params = build(:user_params, %{"cpf" => cpf})
 
       expect(ClientMock, :get_cep_info, fn _cep -> {:ok, build(:cep_info)} end)
 
@@ -178,8 +182,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
                "address" => "Random street, 10",
                "age" => 18,
                "cep" => "01001000",
-               "cpf" => "12345678900",
-               "email" => "johndoe@example.com",
+               "cpf" => _,
+               "email" => _,
                "name" => "John Doe"
              } = response
     end
@@ -271,8 +275,8 @@ defmodule RockeliveryWeb.UsersControllerTest do
                "address" => "Random street, 10",
                "age" => 20,
                "cep" => "01001000",
-               "cpf" => "12345678900",
-               "email" => "johndoe@example.com",
+               "cpf" => _,
+               "email" => _,
                "name" => "John Doe"
              } = response
     end

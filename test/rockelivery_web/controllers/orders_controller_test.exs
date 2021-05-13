@@ -7,16 +7,13 @@ defmodule RockeliveryWeb.OrdersControllerTest do
 
   describe "create/2" do
     setup %{conn: conn} do
-      user_id = "b925ffac-7a13-43e1-9a0a-64639b140721"
-      item_id = "b925ffac-7a13-43e1-9a0a-64639b140722"
-
-      user = insert(:user, id: user_id)
-      insert(:item, id: item_id)
+      user = insert(:user)
+      item = insert(:item)
 
       {:ok, token, _claims} = Guardian.encode_and_sign(user)
       conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-      {:ok, conn: conn, user_id: user_id, item_id: item_id}
+      {:ok, conn: conn, user_id: user.id, item_id: item.id}
     end
 
     test "when all params are valid, creates the order", %{
@@ -65,18 +62,14 @@ defmodule RockeliveryWeb.OrdersControllerTest do
 
   describe "delete/2" do
     setup %{conn: conn} do
-      order_id = "b925ffac-7a13-43e1-9a0a-64639b140721"
-      user_id = "b925ffac-7a13-43e1-9a0a-64639b140722"
-
-      user = insert(:user, id: user_id)
+      user = insert(:user)
       item = insert(:item)
-
-      insert(:order, id: order_id, user_id: user_id, items: [item])
+      order = insert(:order, user_id: user.id, items: [item])
 
       {:ok, token, _claims} = Guardian.encode_and_sign(user)
       conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-      {:ok, conn: conn, order_id: order_id}
+      {:ok, conn: conn, order_id: order.id}
     end
 
     test "when there is an order with the given id, deletes the order", %{
@@ -112,20 +105,16 @@ defmodule RockeliveryWeb.OrdersControllerTest do
 
   describe "index/2" do
     setup %{conn: conn} do
-      order1_id = "b925ffac-7a13-43e1-9a0a-64639b140720"
-      order2_id = "b925ffac-7a13-43e1-9a0a-64639b140721"
-      user_id = "b925ffac-7a13-43e1-9a0a-64639b140722"
-
-      user = insert(:user, id: user_id)
+      user = insert(:user)
       item = insert(:item)
 
-      insert(:order, id: order1_id, user_id: user_id, items: [item])
-      insert(:order, id: order2_id, user_id: user_id, items: [item])
+      order1 = insert(:order, user_id: user.id, items: [item])
+      order2 = insert(:order, user_id: user.id, items: [item])
 
       {:ok, token, _claims} = Guardian.encode_and_sign(user)
       conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-      {:ok, conn: conn, order1_id: order1_id, order2_id: order2_id}
+      {:ok, conn: conn, order1_id: order1.id, order2_id: order2.id}
     end
 
     test "should return all orders", %{conn: conn, order1_id: order1_id, order2_id: order2_id} do
@@ -141,27 +130,27 @@ defmodule RockeliveryWeb.OrdersControllerTest do
                  "id" => ^order1_id,
                  "items" => [
                    %{
-                     "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+                     "id" => _
                    }
                  ],
                  "payment_method" => "credit_card",
                  "user" => %{
-                   "id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+                   "id" => _
                  },
-                 "user_id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+                 "user_id" => _
                },
                %{
                  "id" => ^order2_id,
                  "items" => [
                    %{
-                     "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+                     "id" => _
                    }
                  ],
                  "payment_method" => "credit_card",
                  "user" => %{
-                   "id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+                   "id" => _
                  },
-                 "user_id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+                 "user_id" => _
                }
              ] = response
     end
@@ -169,18 +158,15 @@ defmodule RockeliveryWeb.OrdersControllerTest do
 
   describe "show/2" do
     setup %{conn: conn} do
-      order_id = "b925ffac-7a13-43e1-9a0a-64639b140721"
-      user_id = "b925ffac-7a13-43e1-9a0a-64639b140722"
-
-      user = insert(:user, id: user_id)
+      user = insert(:user)
       item = insert(:item)
 
-      insert(:order, id: order_id, user_id: user_id, items: [item])
+      order = insert(:order, user_id: user.id, items: [item])
 
       {:ok, token, _claims} = Guardian.encode_and_sign(user)
       conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-      {:ok, conn: conn, order_id: order_id}
+      {:ok, conn: conn, order_id: order.id}
     end
 
     test "when there is an order with the given id, returns the order", %{
@@ -198,14 +184,14 @@ defmodule RockeliveryWeb.OrdersControllerTest do
                "id" => ^order_id,
                "items" => [
                  %{
-                   "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+                   "id" => _
                  }
                ],
                "payment_method" => "credit_card",
                "user" => %{
-                 "id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+                 "id" => _
                },
-               "user_id" => "b925ffac-7a13-43e1-9a0a-64639b140722"
+               "user_id" => _
              } = response
     end
 
@@ -228,64 +214,75 @@ defmodule RockeliveryWeb.OrdersControllerTest do
     end
   end
 
-  # describe "update/2" do
-  #   setup %{conn: conn} do
-  #     id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+  describe "update/2" do
+    setup %{conn: conn} do
+      id = "2baadea4-1d22-4d8c-9455-2ea5d692f931"
 
-  #     user = insert(:user, id: id)
-  #     {:ok, token, _claims} = Guardian.encode_and_sign(user)
+      user = insert(:user, id: id)
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
 
-  #     conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
 
-  #     {:ok, conn: conn, id: id}
-  #   end
+      {:ok, conn: conn, id: id}
+    end
 
-  #   test "when there is an user with the given id, update the user", %{conn: conn, id: id} do
-  #     params = %{"age" => 20, "password" => "654321"}
+    test "when there is an user with the given id, update the user", %{conn: conn, id: id} do
+      params = %{"age" => 20, "password" => "654321"}
 
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, id, params))
-  #       |> json_response(:ok)
+      response =
+        conn
+        |> put(Routes.users_path(conn, :update, id, params))
+        |> json_response(:ok)
 
-  #     assert %{
-  #              "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f931",
-  #              "address" => "Random street, 10",
-  #              "age" => 20,
-  #              "cep" => "01001000",
-  #              "cpf" => "12345678900",
-  #              "email" => "johndoe@example.com",
-  #              "name" => "John Doe"
-  #            } = response
-  #   end
+      assert %{
+               "id" => "2baadea4-1d22-4d8c-9455-2ea5d692f931",
+               "address" => "Random street, 10",
+               "age" => 20,
+               "cep" => "01001000",
+               "cpf" => _,
+               "email" => _,
+               "name" => "John Doe"
+             } = response
+    end
 
-  #   test "when there are invalid params, returns an error", %{conn: conn, id: id} do
-  #     params = %{"password" => "123"}
+    test "when there are invalid params, returns an error", %{conn: conn, id: id} do
+      params = %{"password" => "123"}
 
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, id, params))
-  #       |> json_response(:bad_request)
+      response =
+        conn
+        |> put(Routes.users_path(conn, :update, id, params))
+        |> json_response(:bad_request)
 
-  #     assert %{"error" => %{"password" => ["should be at least 6 character(s)"]}} = response
-  #   end
+      assert %{"error" => %{"password" => ["should be at least 6 character(s)"]}} = response
+    end
 
-  #   test "when there is no user with the given id, returns an error", %{conn: conn} do
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, "2baadea4-1d22-4d8c-9455-2ea5d692f932"))
-  #       |> json_response(:not_found)
+    test "when there is no user with the given id, returns an error", %{conn: conn} do
+      response =
+        conn
+        |> put(Routes.users_path(conn, :update, "2baadea4-1d22-4d8c-9455-2ea5d692f932"))
+        |> json_response(:not_found)
 
-  #     assert response == %{"error" => "User not found"}
-  #   end
+      assert response == %{"error" => "User not found"}
+    end
 
-  #   test "when the id format is invalid, returns an error", %{conn: conn} do
-  #     response =
-  #       conn
-  #       |> put(Routes.users_path(conn, :update, "invalid_id"))
-  #       |> json_response(:bad_request)
+    test "when the id format is invalid, returns an error", %{conn: conn} do
+      response =
+        conn
+        |> put(Routes.users_path(conn, :update, "invalid_id"))
+        |> json_response(:bad_request)
 
-  #     assert response == %{"message" => "Invalid id format"}
-  #   end
-  # end
+      assert response == %{"message" => "Invalid id format"}
+    end
+
+    test "when the user_id format is invalid, returns an error", %{conn: conn, id: id} do
+      params = %{"user_id" => "invalid_id"}
+
+      response =
+        conn
+        |> put(Routes.users_path(conn, :update, id, params))
+        |> json_response(:bad_request)
+
+      assert response == %{"message" => "Invalid id format"}
+    end
+  end
 end

@@ -8,8 +8,8 @@ defmodule Rockelivery.Factory do
       "age" => 18,
       "address" => "Random street, 10",
       "cep" => "01001000",
-      "cpf" => "12345678900",
-      "email" => "johndoe@example.com",
+      "cpf" => "#{Enum.random(10_000_000_000..99_999_999_999)}",
+      "email" => "#{Enum.random(0..100_000)}@test.com",
       "password" => "123456",
       "name" => "John Doe"
     }
@@ -20,13 +20,12 @@ defmodule Rockelivery.Factory do
       age: 18,
       address: "Random street, 10",
       cep: "01001000",
-      cpf: "12345678900",
-      email: "johndoe@example.com",
+      cpf: "#{Enum.random(10_000_000_000..99_999_999_999)}",
+      email: "#{Enum.random(0..100_000)}@test.com",
       password: "123456",
       password_hash:
         "$pbkdf2-sha512$160000$5zoT/vkD/v4cVTyeL9XhyA$lssj/b2OxdxiwzRnlmdMHr1PHVFa2UcNmlScYTvao9D96KVeZPHM2naWuRXCOzFOECx02O9xtgN7VRzsMwmZlA",
-      name: "John Doe",
-      id: "2baadea4-1d22-4d8c-9455-2ea5d692f931"
+      name: "John Doe"
     }
   end
 
@@ -59,8 +58,7 @@ defmodule Rockelivery.Factory do
       category: "food",
       description: "Pepperoni Pizza",
       price: "59.90",
-      photo: "/priv/photo/pepperoni_pizza.jpg",
-      id: "2baadea4-1d22-4d8c-9455-2ea5d692f932"
+      photo: "/priv/photo/pepperoni_pizza.jpg"
     }
   end
 
