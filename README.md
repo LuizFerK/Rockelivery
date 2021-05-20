@@ -47,9 +47,12 @@
 
 # :rocket: Features
 
-- See all the clients appointments with you
-- Display the appointments every day of the week
-- Update your profile
+- Create, delete and updates users
+- Sign-in with JWT authentication
+- Create, delete and updates items
+- Create orders from your favorite dishes
+- Delete and update orders
+- Generate an Orders Report for every hour to keep in track with your application
 
 # :wrench: Installation
 
@@ -580,9 +583,10 @@ In case you don't have an SSH key on your GitHub account, you can clone the proj
 
 ### Phoenix (web framework)
 - Ecto
+- Elixir GenServer (orders report)
 - Guardian (authentication)
-- PBKDF2
-- Tesla
+- PBKDF2 (password cryptography)
+- Tesla (http client to external apis)
 
 # :bug: Issues
 
