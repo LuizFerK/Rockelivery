@@ -83,6 +83,10 @@ In case you don't have an SSH key on your GitHub account, you can clone the proj
 
 # :triangular_flag_on_post: Endpoints
 
+> All the endpoints except for the user's creation and sign-in are protected with JWT authentication. You'll need to pass a valid token from an existent user in every route as a Bearer Token authentication. You can get the token by signing in to the app on the users sign in route
+
+> If you use Insomnia as your HTTP API requester, you can use the [Insomnia Rockelivery Collection](https://github.com/LuizFerK/Rockelivery/blob/master/.github/insomnia.json) to set up your requests as fast as possible!
+
 ### Users
 
 * :green_circle: Create - POST `http://localhost:4000/api/users`
